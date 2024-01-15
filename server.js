@@ -80,7 +80,16 @@ app.get('/api/currency/:id', (request, response) => {
  * with data object enclosed
  * @responds by returning the newly created resource
  */
-app.post('...', (request, response) => {
+app.post('/api/currency', (request, response) => {
+  //extract data sent in the POST request body using request.body;
+  const { currencyCode , name , symbol } = request.body;
+
+  // Check if required information is present
+  if( !currencyCode || !name || !symbol) {
+  
+  // Return a 400 status with an error message if content is missing
+    return response.status(400).json({ error: 'content missing' });
+  }
 
 
 })
