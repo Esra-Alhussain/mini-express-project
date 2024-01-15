@@ -58,10 +58,21 @@ app.get('/api/currency/', (request, response) => {
  * @receives a get request to the URL: http://localhost:3001/api/currency/:id
  * @responds with returning specific data as a JSON
  */
-app.get('...', (request, response) => {
+app.get('/api/currency/:id', (request, response) => {
+  //request.params.id extracts the id parameter from the URL.
+  const currencyId = request.params.id;
 
+  // Find the currency with the specified id using find method
+  const currency = currencies.find(currency => currency.id == currencyId);
 
-})
+  //If the currency is found, it is returned as JSON
+  if (currency){
+    response.json(currency);
+  }else{
+    // Return a 404 status with an error message if currency is not found
+    response.status(404).json({ error: 'resource not found' });
+  }
+});
 
 /**
  * TODO: POST Endpoint
