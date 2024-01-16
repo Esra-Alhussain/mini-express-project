@@ -85,14 +85,26 @@ app.post('/api/currency', (request, response) => {
   const { currencyCode , name , symbol } = request.body;
 
   // Check if required information is present
-  if( !currencyCode || !name || !symbol) {
-  
+  if( !currencyCode || !country || !conversionRate) {
   // Return a 400 status with an error message if content is missing
     return response.status(400).json({ error: 'content missing' });
   }
+   //creating a new array "updatedCurrencies" that contains all the elements of the original "currencies"
+   //arary + the new currency object
+   // Create a new currency object with a unique ID 
+  const updatedCurrencies = currencies.concat ({
+    id:uuidv4(),
+    currencyCode,
+    country,
+    conversionRate,
+  });
 
+  //creating a new array "updatedCurrencies" that contains all the elements of the original "currencies"
+  //aray + the new currency object
 
-})
+  // Respond with the newly created currency
+  response.status(201).json(newCurrency);
+});
 
 /**
  * TODO: PUT:id endpoint
