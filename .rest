@@ -1,0 +1,21 @@
+GET http://localhost:3001/api/currency/
+###
+POST http://localhost:3001/api/currency
+Content-Type: application/json
+
+{
+  "currencyCode": "PDN",
+  "country": "Poland",
+  "conversionRate": 4
+}
+###
+
+GET http://localhost:3001/api/currencies
+
+###
+PUT http://localhost:3001/api/currency/1/8
+Content-Type: application/json
+
+{
+  "conversionRate": 8
+}

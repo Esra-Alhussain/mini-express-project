@@ -1,3 +1,5 @@
+// const { uuid } = require('uuidv4');
+const { v4: uuidv4 } = require('uuid');
 const express = require('express')  // We import the express application
 const cors = require('cors') // Necessary for localhost
 const app = express() // Creates an express application in app
@@ -58,11 +60,12 @@ app.get('/api/currency/', (request, response) => {
  * @receives a get request to the URL: http://localhost:3001/api/currency/:id
  * @responds with returning specific data as a JSON
  */
+//sets up a GET route at the path /api/currency/:id
 app.get('/api/currency/:id', (request, response) => {
-  //request.params.id extracts the id parameter from the URL.
+  //extracts the id parameter from the URL
   const currencyId = request.params.id;
-
   // Find the currency with the specified id using find method
+  //This is the condition inside the arrow function. It checks if the id property of the current currency object (the one being iterated over in the array) is equal to the value stored in the currencyId variable
   const currency = currencies.find(currency => currency.id == currencyId);
 
   //If the currency is found, it is returned as JSON
@@ -82,7 +85,7 @@ app.get('/api/currency/:id', (request, response) => {
  */
 app.post('/api/currency', (request, response) => {
   //extract data sent in the POST request body using request.body;
-  const { currencyCode , name , symbol } = request.body;
+  const { currencyCode , country , conversionRate } = request.body;
 
   // Check if required information is present
   if( !currencyCode || !country || !conversionRate) {
@@ -92,18 +95,23 @@ app.post('/api/currency', (request, response) => {
    //creating a new array "updatedCurrencies" that contains all the elements of the original "currencies"
    //arary + the new currency object
    // Create a new currency object with a unique ID 
-  const updatedCurrencies = currencies.concat ({
-    id:uuidv4(),
-    currencyCode,
-    country,
-    conversionRate,
-  });
+   const newCurrency = {
+    id:4,
+    currencyCode:currencyCode,
+    country: country,
+    conversionRate: conversionRate,
+   }
+     // Use concat to create a new array with the old currencies and the new one
+    const updatedCurrencies = currencies.concat ( newCurrency);
+  
+    // currencies.push(newCurrency);
 
-  //creating a new array "updatedCurrencies" that contains all the elements of the original "currencies"
-  //aray + the new currency object
+    console.log(newCurrency);
+    //creating a new array "updatedCurrencies" that contains all the elements of the original "currencies"
+    //array + the new currency object
+    // Respond with the newly created currency
+  response.status(201).json(updatedCurrencies);
 
-  // Respond with the newly created currency
-  response.status(201).json(newCurrency);
 });
 
 /**
@@ -113,8 +121,35 @@ app.post('/api/currency', (request, response) => {
  * Hint: updates the currency with the new conversion rate
  * @responds by returning the newly updated resource
  */
-app.put('...', (request, response) => {
-  
+app.put('/api/currency/:id/:newRate', (request, response) => {
+  //extract data  properties from an object sent in the PUT request using destructuring assignment" to extract and assign them to variables
+  const { currencyCode, country, conversionRate } = request.body;
+  const newRate= request.params.newRate;
+  const currencyId = parseInt(request.params.id);
+
+  //Use concat to create a new array with the updated conversionRate
+  const updatedCurrencies = currencies.map(currency => {
+    // Check if the current currency object matches the one you want to update
+    if (currency.id === currencyId){
+    // Update the conversionRate directly in the existing object
+     currency.conversionRate = newRate;
+
+    return {
+      ...currency,
+      conversionRate: newRate
+     };
+   };
+   return currency;
+  });
+  console.log(updatedCurrencies);
+
+  //Return the updatedCurrencies
+  return response.json(updatedCurrencies)
+
+})
+
+app.get('/api/currencies', (request, response) => {
+  response.json(updatedCurrencies)
 })
 
 /**
@@ -122,10 +157,16 @@ app.put('...', (request, response) => {
  * @receives a delete request to the URL: http://localhost:3001/api/currency/:id,
  * @responds by returning a status code of 204
  */
-app.post('...', (request, response) => {
-
+app.delete('/api/currencye/:id', (request, response) => {
+ 
 
 })
+
+// Catch-all route for unknown endpoints
+app.use(( request, response) => {
+ // Return a 404 status with an error message for unknown endpoints
+ response.status(404).json({ error: 'unknown endpoint'});
+});
 
 const PORT = 3001
 app.listen(PORT, () => {
