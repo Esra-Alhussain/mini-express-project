@@ -4,7 +4,7 @@
   "description": "Package manager for the first Assignment in the Mini Project Roadmap",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Student",
@@ -12,6 +12,7 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.18.2",
+    "morgan": "^1.10.0",
     "uuid": "^9.0.1",
     "uuid4": "^2.0.3"
   }
