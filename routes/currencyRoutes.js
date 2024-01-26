@@ -2,11 +2,14 @@
 const { v4: uuidv4 } = require('uuid');
 const express = require('express');
 const router = express.Router();  //define router object
+const morgan = require('morgan');
 
 router.use(express.json());
 
 router.use
   
+// Use morgan middleware for logging
+router.use(morgan('dev'));
 
 /**
  * DATA STORAGE
