@@ -51,6 +51,7 @@ let currencies = [
    */
   //sets up a GET route at the path /api/currency/:id
   router.get('/:id', (request, response) => {
+    try{
     //extracts the id parameter from the URL
     const currencyId = request.params.id;
     // Find the currency with the specified id using find method
@@ -64,6 +65,10 @@ let currencies = [
       // Return a 404 status with an error message if currency is not found
       response.status(404).json({ error: 'resource not found' });
     }
+   } catch (error) {
+    // Handle errors 
+    response.status(500).json({ error: 'Internal server error' });
+    }
   });
   
   /**
@@ -73,6 +78,7 @@ let currencies = [
    * @responds by returning the newly created resource
    */
   router.post('/', (request, response) => {
+    try{
     //extract data sent in the POST request body using request.body;
     const { currencyCode , country , conversionRate } = request.body;
   
@@ -100,7 +106,11 @@ let currencies = [
       //array + the new currency object
       // Respond with the newly created currency
     response.status(201).json(updatedCurrencies);
-  
+
+   } catch (error) {
+    // Handle errors 
+    response.status(500).json({ error: 'Internal server error' });
+    }
   });
   
   /**
@@ -111,6 +121,8 @@ let currencies = [
    * @responds by returning the newly updated resource
    */
   router.put('/:id/:newRate', (request, response) => {
+    try{ 
+
     //extract data  properties from an object sent in the PUT request using destructuring assignment" to extract and assign them to variables
     const { currencyCode, country, conversionRate } = request.body;
     const newRate= request.params.newRate;
@@ -121,7 +133,7 @@ let currencies = [
       // Check if the current currency object matches the one you want to update
       if (currency.id === currencyId){
       // Update the conversionRate directly in the existing object
-       currency.conversionRate = newRate;
+       currency.conversionRate = Number(newRate);
   
       return {
         ...currency,
@@ -133,7 +145,12 @@ let currencies = [
     console.log(updatedCurrencies);
   
     //Return the updatedCurrencies
-    return response.json(updatedCurrencies)
+    return response.json(updatedCurrencies);
+
+  } catch ( error ) {
+    response.status(500).json({ error: 'Internal server error' });
+
+     }
   
   })
   
@@ -143,6 +160,8 @@ let currencies = [
    * @responds by returning a status code of 204
    */
   router.delete('/:id', (request, response) => {
+    try{
+    
     // Extract the id parameter from the URL
     const currencyId = parseInt(request.params.id);
     console.log(`This is the currencies Array: ${ JSON.stringify(currencies)}`)
@@ -160,6 +179,10 @@ let currencies = [
         error: 'resource not found'
       });
      }
-  })
+    } catch (error) {
+      // Handle errors 
+      response.status(500).json({ error: 'Internal server error' });
+    }
+  });
 
   module.exports = router;   //export 
