@@ -16,9 +16,14 @@ app.use(express.json())
 
 
 // Use morgan middleware for logging
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :req-body'));
+
+morgan.token('req-body', (req) => {
+  return JSON.stringify(req.body);
+});
+
+// Use Morgan middleware with custom format
 app.use(morgan('dev'));
-
-
 /**
  * TESTING Endpoint (Completed)
  * @receives a get request to the URL: http://localhost:3001/
