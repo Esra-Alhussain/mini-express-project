@@ -1,8 +1,8 @@
-// sequelize-config.js
-
+// import the Sequelize class from the sequelize package
 const { Sequelize } = require('sequelize');
 
 // Initialize Sequelize with database credentials
+//create a new instance of Sequelize, passing an object with the database credentials
 const sequelize = new Sequelize({
     dialect: 'postgres',
     host: process.env.DB_HOST,
