@@ -7,7 +7,7 @@ const Currency = sequelize.define('Currency', {  //define the Currency model
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,           //the primary key
-        autoIncrement: TextTrackCue
+        autoIncrement: true
     },
     CurrencyCode: {
         type: DataTypes.STRING,

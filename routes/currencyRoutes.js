@@ -3,11 +3,12 @@ const { v4: uuidv4 } = require('uuid');
 const express = require('express');
 const router = express.Router();  //define router object
 const morgan = require('morgan');
+const { Currency } = require('../models');  //import Sequelize Currency model 
 
+//Middleware for parsing JSON request bodies
 router.use(express.json());
 
 router.use
-
 
 // Use morgan middleware for logging
 router.use(morgan(':method :url :status :res[content-length] - :response-time ms :req-body'));
