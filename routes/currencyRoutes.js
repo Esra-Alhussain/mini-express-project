@@ -102,7 +102,6 @@ router.use(morgan('dev'));
       console.log(newCurrency);
       // Send JSON response with newly created currency
       response.status(201).json(newCurrency);
-
    } catch (error) {
       // Handle errors 
       response.status(500).json({ error: 'Internal server error' });
@@ -116,38 +115,24 @@ router.use(morgan('dev'));
    * Hint: updates the currency with the new conversion rate
    * @responds by returning the newly updated resource
    */
-  router.put('/:id/:newRate', (request, response) => {
+  // modify an existing record in the Currency table based on the provided ID
+  router.put('/:id/:newRate', async (request, response) => {
     try{ 
-
-    //extract data  properties from an object sent in the PUT request using destructuring assignment" to extract and assign them to variables
-    const { currencyCode, country, conversionRate } = request.body;
-    const newRate= request.params.newRate;
-    const currencyId = parseInt(request.params.id);
-  
-    //Use concat to create a new array with the updated conversionRate
-    const updatedCurrencies = currencies.map(currency => {
-      // Check if the current currency object matches the one you want to update
-      if (currency.id === currencyId){
-      // Update the conversionRate directly in the existing object
-       currency.conversionRate = Number(newRate);
-  
-      return {
-        ...currency,
-        conversionRate: newRate
-       };
-     };
-     return currency;
-    });
-    console.log(updatedCurrencies);
-  
-    //Return the updatedCurrencies
-    return response.json(updatedCurrencies);
-
+      //Extracts the newRate and the currencyId from the request parameter 
+      const { newRate }= request.params;
+      const currencyId = parseInt(request.params.id);
+    
+      //Use the "update" method to update the currency in the database by taking 2 parameters
+      //Pass an object with the new conversionRate to be updated
+      //Pass a 'where' clause specifying the ID of the currency to be updated
+      const updatedCurrencies = await Currency.update( {conversionRate: newRate}, { where: { id: currencyId } });
+      console.log(updatedCurrencies);
+    
+      // Send a JSON response containing the result of the update operation
+      response.json(updatedCurrencies);
   } catch ( error ) {
-    response.status(500).json({ error: 'Internal server error' });
-
+      response.status(500).json({ error: 'Internal server error' });
      }
-  
   })
   
   /**
