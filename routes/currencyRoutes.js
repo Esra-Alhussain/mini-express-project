@@ -49,9 +49,16 @@ let currencies = [
    * @receives a get request to the URL: http://localhost:3001/api/currency/
    * @responds with returning the data as a JSON
    */
-  router.get('/', (request, response) => {
-    response.json(currencies)
-  })
+  router.get('/', async (request, response) => {
+    try {
+       //using the findAll() method to retrives all records from 'Curreny' table in the database and returns them as an array of objects
+       const currencies = await Currency.findAll();    //Retrive all currencies from data using Sequelize method
+       response.json(currencies);    //send JSON response with currencies
+    }catch (error){
+       console.error('Error fetching currencies:', error);
+       response.status(500).json({ error: 'Internal server error '});
+    }
+  });
   
   /**
    * TODO: GET:id Endpoint
