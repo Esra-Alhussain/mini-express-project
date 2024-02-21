@@ -140,26 +140,16 @@ router.use(morgan('dev'));
    * @receives a delete request to the URL: http://localhost:3001/api/currency/:id,
    * @responds by returning a status code of 204
    */
-  router.delete('/:id', (request, response) => {
+  router.delete('/:id', async (request, response) => {
     try{
     
-    // Extract the id parameter from the URL
-    const currencyId = parseInt(request.params.id);
-    console.log(`This is the currencies Array: ${ JSON.stringify(currencies)}`)
-    // Use the filter method to create a new array excluding the currency with the specified ID
-    //the condition checks if the id of the current currency is not equal (!==) to the specified currencyId
-    const updatedCurrencies = currencies.filter(currency => currency.id !== currencyId)
-    console.log(`This is the updatedCurrencies Array:`,JSON.stringify(updatedCurrencies))
-  
-    // Check if any currency was removed (if the arrays have different lengths)
-    if(updatedCurrencies.length < currencies.length){
-      // Respond with a status code of 204 (success, no content)
-      response.status(204).send();
-     }else{
-      response.status(404).json({
-        error: 'resource not found'
-      });
-     }
+      // Extract the id parameter from the URL
+      const currencyId = parseInt(request.params.id);
+      console.log(`This is the currencies Array: ${ JSON.stringify(currencies)}`)
+      
+      // Delete currency using Sequelize method
+      const updatedCurrencies = await Currency.destroy({ where: { id: currencyId } })
+      response.status(204).end();   //send 204 => no content response
     } catch (error) {
       // Handle errors 
       response.status(500).json({ error: 'Internal server error' });
