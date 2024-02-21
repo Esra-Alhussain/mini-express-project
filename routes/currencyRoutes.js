@@ -3,7 +3,7 @@ const { v4: uuidv4 } = require('uuid');
 const express = require('express');
 const router = express.Router();  //define router object
 const morgan = require('morgan');
-const { Currency } = require('../models');  //import Sequelize Currency model 
+const { Currency } = require('../models/Currency');  //import Sequelize Currency model 
 
 //Middleware for parsing JSON request bodies
 router.use(express.json());
@@ -66,13 +66,12 @@ router.use(morgan('dev'));
    * @responds with returning specific data as a JSON
    */
   //sets up a GET route at the path /api/currency/:id
-  router.get('/:id', (request, response) => {
+  router.get('/:id', async (request, response) => {
     try{
     //extracts the id parameter from the URL
     const currencyId = request.params.id;
-    // Find the currency with the specified id using find method
-    //This is the condition inside the arrow function. It checks if the id property of the current currency object (the one being iterated over in the array) is equal to the value stored in the currencyId variable
-    const currency = currencies.find(currency => currency.id == currencyId);
+    // Find currency by ID using Sequelize method (findByPk)
+    const currency = await Currency.findByPk(currencyId);
   
     //If the currency is found, it is returned as JSON
     if (currency){
@@ -93,39 +92,20 @@ router.use(morgan('dev'));
    * with data object enclosed
    * @responds by returning the newly created resource
    */
-  router.post('/', (request, response) => {
+  router.post('/', async (request, response) => {
     try{
     //extract data sent in the POST request body using request.body;
-    const { currencyCode , country , conversionRate } = request.body;
+    const { currencyCode , countryId , conversionRate } = request.body;
   
-    // Check if required information is present
-    if( !currencyCode || !country || !conversionRate) {
-    // Return a 400 status with an error message if content is missing
-      return response.status(400).json({ error: 'content missing' });
-    }
-     //creating a new array "updatedCurrencies" that contains all the elements of the original "currencies"
-     //arary + the new currency object
-     // Create a new currency object with a unique ID 
-     const newCurrency = {
-      id:uuidv4(),  // Generate a new UUID
-      currencyCode:currencyCode,
-      country: country,
-      conversionRate: conversionRate,
-     }
-       // Use concat to create a new array with the old currencies and the new one
-      const updatedCurrencies = currencies.concat ( newCurrency);
-    
-      // currencies.push(newCurrency);
-  
+     //create() method will only create a new currency if all required fields are provided and meet the defined constraints in the model 
+     const newCurrency = await Currency.create({ currencyCode, countryId, conversionRate })
       console.log(newCurrency);
-      //creating a new array "updatedCurrencies" that contains all the elements of the original "currencies"
-      //array + the new currency object
-      // Respond with the newly created currency
-    response.status(201).json(updatedCurrencies);
+      // Send JSON response with newly created currency
+      response.status(201).json(newCurrency);
 
    } catch (error) {
-    // Handle errors 
-    response.status(500).json({ error: 'Internal server error' });
+      // Handle errors 
+      response.status(500).json({ error: 'Internal server error' });
     }
   });
   

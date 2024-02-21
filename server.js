@@ -2,7 +2,7 @@
 require('dotenv').config();
 
 // Import Sequelize instance
-const sequelize = require('./sequelize-config');
+const sequelize = require('./config');
 
 // const { uuid } = require('uuidv4');
 const express = require('express')  // We import the express application
