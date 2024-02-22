@@ -30,3 +30,20 @@ router.get('/', async (request, response) => {
 });
 
 
+//Get specific country Id 
+router.get('/:id', async(request, response) => {
+    try{
+        const {countryId} = request.params;
+        const country = await Country.findByPk(countryId);
+        if(country){
+            response.json(country);
+        }else{
+            //Handle the error on the client-side while processing the request
+            response.status(404).json({ error: 'resource not found'})
+        } 
+    }catch(error){
+        console.error('Err')
+        //Handle the error on server-side while processing the request
+        response.status(500).json({ error: 'Internal server error'})
+    }
+})
