@@ -18,7 +18,7 @@ morgan.token('req-body', (req) => {
 // Use morgan middleware for logging
 router.use(morgan('dev'));
 
-//Get endpoint
+//Get all the countries
 router.get('/', async (request, response) => {
     try{
         const countries = await Country.findAll();
@@ -46,4 +46,18 @@ router.get('/:id', async(request, response) => {
         //Handle the error on server-side while processing the request
         response.status(500).json({ error: 'Internal server error'})
     }
-})
+});
+
+//Post a new country
+router.post('/', async(request, response) => {
+    try{
+        //extract the data that was sent in the POST request body 
+        const { countryId, countryName  } = request.body;
+        const newCountry = await Country.create({ countryId, countryName })
+        response.status(201).json(newCountry);
+    }catch(error){
+        response.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+

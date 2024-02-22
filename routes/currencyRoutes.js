@@ -54,12 +54,12 @@ router.use(morgan('dev'));
   //sets up a GET route at the path /api/currency/:id
   router.get('/:id', async (request, response) => {
     try{
-    //extracts the id parameter from the URL
-    const currencyId = request.params.id;
-    // Find currency by ID using Sequelize method (findByPk)
-    const currency = await Currency.findByPk(currencyId);
-  
-    //If the currency is found, it is returned as JSON
+      //extracts the id parameter from the URL
+      const currencyId = request.params.id;
+      // Find currency by ID using Sequelize method (findByPk)
+      const currency = await Currency.findByPk(currencyId);
+    
+      //If the currency is found, it is returned as JSON
     if (currency){
       response.json(currency);
     }else{
@@ -80,12 +80,13 @@ router.use(morgan('dev'));
    */
   router.post('/', async (request, response) => {
     try{
-    //extract data sent in the POST request body using request.body;
-    const { currencyCode , countryId , conversionRate } = request.body;
-  
-     //create() method will only create a new currency if all required fields are provided and meet the defined constraints in the model 
-     const newCurrency = await Currency.create({ currencyCode, countryId, conversionRate })
+      //extract data sent in the POST request body using request.body;
+      const { currencyCode , countryId , conversionRate } = request.body;
+    
+      //create() method will only create a new currency if all required fields are provided and meet the defined constraints in the model 
+      const newCurrency = await Currency.create({ currencyCode, countryId, conversionRate })
       console.log(newCurrency);
+      
       // Send JSON response with newly created currency
       response.status(201).json(newCurrency);
    } catch (error) {
@@ -129,16 +130,16 @@ router.use(morgan('dev'));
   router.delete('/:id', async (request, response) => {
     try{
     
-      // Extract the id parameter from the URL
-      const currencyId = parseInt(request.params.id);
-      console.log(`This is the currencies Array: ${ JSON.stringify(currencies)}`)
+       // Extract the id parameter from the URL
+        const currencyId = parseInt(request.params.id);
+        console.log(`This is the currencies Array: ${ JSON.stringify(currencies)}`)
       
-      // Delete currency using Sequelize method
-      const updatedCurrencies = await Currency.destroy({ where: { id: currencyId } })
-      response.status(204).end();   //send 204 => no content response
+        // Delete currency using Sequelize method
+        const updatedCurrencies = await Currency.destroy({ where: { id: currencyId } })
+        response.status(204).end();   //send 204 => no content response
     } catch (error) {
-      // Handle errors 
-      response.status(500).json({ error: 'Internal server error' });
+        // Handle errors 
+        response.status(500).json({ error: 'Internal server error' });
     }
   });
 
