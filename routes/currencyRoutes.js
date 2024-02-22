@@ -29,20 +29,6 @@ router.use(morgan('dev'));
  * country: a string, the name of the country
  * conversionRate: the amount, in that currency, required to equal 1 Canadian dollar
  */
-// let currencies = [
-//     {
-//       id: 1,
-//       currencyCode: "CDN",
-//       countryId: "Canada",
-//       conversionRate: 1
-//     },
-//     {
-//       id: 2,
-//       currencyCode: "USD",
-//       countryId: "United States of America",
-//       conversionRate: 0.75
-//     }
-//   ]
 
   /**
    * TODO: GET Endpoint
