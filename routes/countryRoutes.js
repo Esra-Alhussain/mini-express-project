@@ -60,4 +60,15 @@ router.post('/', async(request, response) => {
     }
 });
 
+//Delete a country
+router.delete('/:id', async(request, response ) => {
+    try{
+        const {countryId} = request.params;
+        const deletedCountry = await Country.destroy({ where: { id: countryId }})
+    }catch(error){
+        response.status(500).json({ error:'Internal server error' })
+    }
+})
+
+
 
