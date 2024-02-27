@@ -1,4 +1,4 @@
-const { DataType } = require('sequelize');
+const { DataTypes } = require('sequelize');
 const sequelize = require('../config');
 
 const Country = sequelize.define('Country', {
@@ -10,7 +10,12 @@ const Country = sequelize.define('Country', {
     name: {
         type: DataTypes.STRING,
         allowNull: false
-    }
-})
+    },
+  },
+    {
+        sequelize,   //specifies the Sequelize instance to be used for this model
+        modelName: 'Currency'   //sets the name of the model to 'Currency
+    });
+
 
 module.exports = Country;

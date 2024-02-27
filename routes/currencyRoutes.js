@@ -8,8 +8,6 @@ const { Currency } = require('../models/Currency');  //import Sequelize Currency
 //Middleware for parsing JSON request bodies
 router.use(express.json());
 
-router.use
-
 // Use morgan middleware for logging
 router.use(morgan(':method :url :status :res[content-length] - :response-time ms :req-body'));
 

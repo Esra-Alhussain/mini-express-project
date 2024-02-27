@@ -7,7 +7,12 @@ Content-Type: application/json
   "country": "Foland",
   "conversionRate": 7
 }
-
+###
+POST http://localhost:3001/api/country
+Content-Type: application/json
+{
+  "name": "USA",
+}
 ###
 PUT http://localhost:3001/api/currency/2/246
 Content-Type: application/json

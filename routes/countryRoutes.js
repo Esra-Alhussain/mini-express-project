@@ -6,7 +6,7 @@ const morgan = require('morgan');
 const { Country } = require('../models/Country');
 
 //add middleware to handle JSON data
-router.use(express.json)
+router.use(express.json())
 
 // Use morgan middleware for logging
 router.use(morgan(':method :url :status :res[content-length] - :response-time ms :req-body'));
@@ -68,7 +68,9 @@ router.delete('/:id', async(request, response ) => {
     }catch(error){
         response.status(500).json({ error:'Internal server error' })
     }
-})
+});
+
+module.exports = router;   //export 
 
 
 

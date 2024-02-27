@@ -1,15 +1,50 @@
 // import the Sequelize class from the sequelize package
-const { Sequelize } = require('sequelize');
+// const { Sequelize } = require('sequelize');
 
-// Initialize Sequelize with database credentials
-//create a new instance of Sequelize, passing an object with the database credentials
-const sequelize = new Sequelize({
-    dialect: 'postgres',
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    username: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-});
+// // Initialize Sequelize with database credentials
+// //create a new instance of Sequelize, passing an object with the database credentials
 
-module.exports = sequelize;
+const { Sequelize } = require("sequelize");
+const sequelize = new Sequelize(  
+    process.env.DB_NAME,  
+    process.env.DB_USER,
+    process.env.DB_PASSWORD,  
+    {    
+      host: process.env.DB_HOST,   
+      port: process.env.DB_PORT,
+      dialect: "postgres",
+      dialectOptions: {
+         ssl: {     
+         require: true,
+         rejectUnauthorized: true,
+              },
+                      }, 
+    });
+   const connect = async () => {
+     try{
+        await sequelize.authenticate()   //if this success continue running 
+        console.log("We have successfully connected to database...");    
+     }catch (error){   //if the connect failed
+        console.log("Unable to connect to database...")
+    }
+    }                         
+                            
+   connect()
+
+   module.exports = sequelize;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

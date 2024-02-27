@@ -4,7 +4,7 @@ const { DataTypes, Model } = require('sequelize');
 //import the Sequelize instance from the configuration file
 const sequelize = require('../config');  
 
-class Currency extends Model {}
+// class Currency extends Model {}
 
 const Currency = sequelize.define('Currency', {  //define the Currency model
     id: {
