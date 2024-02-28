@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { Currency, Country } = require('../models')
+const Country = require('../models/Country')
+const Currency = require('../models/Currency')
 
 //retrives the currency code from the currency model and the country name from the country model
 router.get('/currency-countryName', async (request, response) => {
@@ -12,8 +13,8 @@ router.get('/currency-countryName', async (request, response) => {
         });
          // Extract currency code and country name from the result
          const currencyCountryData = currencies.map(currency => {
-            return{
-                currencyCode: currency.code,
+            return{ 
+                currencyCode: currency.currencyCode,
                 countryName: currency.Country.name
             };
          });

@@ -60,6 +60,24 @@ router.post('/', async(request, response) => {
     }
 });
 
+// router.put('/:id/:countryCode', async (request, response) => {
+//     try{ 
+//       //Extracts the newRate and the currencyId from the request parameter 
+//       const { countryCode }= request.params;
+//       const curId = parseInt(request.params.id);
+    
+//       //Use the "update" method to update the currency in the database by taking 2 parameters
+//       //Pass an object with the new conversionRate to be updated
+//       //Pass a 'where' clause specifying the ID of the currency to be updated
+//       const updatedCountries = await Country.update( {conversionRate: newRate}, { where: { id: currencyId } });
+//       console.log(updatedCountries);
+    
+//       // Send a JSON response containing the result of the update operation
+//       response.json(updatedCountries);
+//   } catch ( error ) {
+//       response.status(500).json({ error: 'Internal server error' });
+//      }
+//   })
 //Delete a country
 router.delete('/:id', async(request, response ) => {
     try{

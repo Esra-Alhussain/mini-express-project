@@ -4,26 +4,27 @@ POST http://localhost:3001/api/currency/
 Content-Type: application/json
 
 {
-  "id":1,
-  "currencyCode": "FDN",
-  "countryId": 1,
+  "id":2,
+  "currencyCode": "Canada",
+  "countryId": 2,
   "conversionRate": 7
 }
 ###
-
 GET http://localhost:3001/api/country/
+
 ###
 POST http://localhost:3001/api/country/
 Content-Type: application/json
 
 {
-  "id":1,
   "name": "USA"
 }
 ###
-PUT http://localhost:3001/api/currency/1/246
+PUT http://localhost:3001/api/currency/2/CAD
 Content-Type: application/json
 
+###  
+Get http://localhost:3001/api/currency-countryName
 
 ###
 DELETE http://localhost:3001/api/currency/1

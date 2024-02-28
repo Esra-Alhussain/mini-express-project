@@ -10,6 +10,7 @@ var morgan = require('morgan');
 const sequelize = require('./config')
 const currencyRoute = require('./routes/currencyRoutes'); //access the currencyRoute file 
 const countryRoute = require('./routes/countryRoutes'); //access the country Route file 
+const route = require('./routes/route'); //access the country Route file 
 
 /**
  * Initial application setup
@@ -41,14 +42,15 @@ app.get('/', (request, response) => {
 
   app.use('/api/country', countryRoute);  
   app.use('/api/currency/', currencyRoute);   
+  app.use('/api', route);
 
     // Catch-all route for unknown endpoints
-    app.use(( request, response) => {
-      // Return a 404 status with an error message for unknown endpoints
-      response.status(404).json({ error: 'unknown endpoint'});
-     });
+app.use(( request, response) => {
+   // Return a 404 status with an error message for unknown endpoints
+   response.status(404).json({ error: 'unknown endpoint'});
+});  
 
-     
+
   const PORT = 3001
   app.listen(PORT, () => {
     console.log(`Server running on port: ${PORT}`)

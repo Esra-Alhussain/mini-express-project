@@ -115,7 +115,7 @@ router.use(morgan('dev'));
     
       // Send a JSON response containing the result of the update operation
       response.json(updatedCurrencies);
-  } catch ( error ) {
+    } catch ( error ) {
       response.status(500).json({ error: 'Internal server error' });
      }
   })
