@@ -1,6 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config');
 
+//create a country table in the database 
 const Country = sequelize.define('Country', {
     id: {
         type: DataTypes.INTEGER,
@@ -14,10 +15,10 @@ const Country = sequelize.define('Country', {
   },
     {
         sequelize,   //specifies the Sequelize instance to be used for this model
-        modelName: 'Currency'   //sets the name of the model to 'Currency
+        modelName: 'Country'   //sets the name of the model to 'Country
     });
     Country
-    .sync()
+    .sync()    //sync the model to the database
     .then(() => {
         console.log('Country table created')
     })

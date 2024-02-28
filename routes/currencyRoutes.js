@@ -3,7 +3,7 @@ const { v4: uuidv4 } = require('uuid');
 const express = require('express');
 const router = express.Router();  //define router object
 const morgan = require('morgan');
-const { Currency } = require('../models/Currency');  //import Sequelize Currency model 
+const Currency = require('../models/Currency');  //import Sequelize Currency model 
 
 //Middleware for parsing JSON request bodies
 router.use(express.json());
@@ -79,17 +79,17 @@ router.use(morgan('dev'));
   router.post('/', async (request, response) => {
     try{
       //extract data sent in the POST request body using request.body;
-      const { currencyCode , countryId , conversionRate } = request.body;
-    
+      // const { id,currencyCode , countryId , conversionRate } = request.body;
+       const addedCurrency = request.body;
       //create() method will only create a new currency if all required fields are provided and meet the defined constraints in the model 
-      const newCurrency = await Currency.create({ currencyCode, countryId, conversionRate })
+      const newCurrency = await Currency.create(addedCurrency);
       console.log(newCurrency);
       
       // Send JSON response with newly created currency
       response.status(201).json(newCurrency);
    } catch (error) {
       // Handle errors 
-      response.status(500).json({ error: 'Internal server error' });
+      response.status(500).json({ error: error });
     }
   });
   
@@ -130,7 +130,7 @@ router.use(morgan('dev'));
     
        // Extract the id parameter from the URL
         const currencyId = parseInt(request.params.id);
-        console.log(`This is the currencies Array: ${ JSON.stringify(currencies)}`)
+        // console.log(`This is the currencies Array: ${ JSON.stringify(currencies)}`)
       
         // Delete currency using Sequelize method
         const updatedCurrencies = await Currency.destroy({ where: { id: currencyId } })

@@ -38,15 +38,17 @@ app.get('/', (request, response) => {
   response.send('Hello World!')
 })
 
-  // Catch-all route for unknown endpoints
-  app.use(( request, response) => {
-    // Return a 404 status with an error message for unknown endpoints
-    response.status(404).json({ error: 'unknown endpoint'});
-   });
 
   app.use('/api/country', countryRoute);  
-  app.use('/api/currency', currencyRoute);   
+  app.use('/api/currency/', currencyRoute);   
 
+    // Catch-all route for unknown endpoints
+    app.use(( request, response) => {
+      // Return a 404 status with an error message for unknown endpoints
+      response.status(404).json({ error: 'unknown endpoint'});
+     });
+
+     
   const PORT = 3001
   app.listen(PORT, () => {
     console.log(`Server running on port: ${PORT}`)

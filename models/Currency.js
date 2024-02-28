@@ -12,23 +12,23 @@ const Currency = sequelize.define('Currency', {  //define the Currency model
         primaryKey: true,           //the primary key
         autoIncrement: true
     },
-    CurrencyCode: {
+    currencyCode: {
         type: DataTypes.STRING,
         allowNull: false
     },
-    CountryId: {
+    countryId: {
         type: DataTypes.INTEGER,
         allowNull: false  
     },
-    ConversionRate: {
+    conversionRate: {
         type: DataTypes.FLOAT,
         allowNull: false
     },
-  },
-    {
-        sequelize,   //specifies the Sequelize instance to be used for this model
-        modelName: 'Currency'   //sets the name of the model to 'Currency
-    });
+  });
+    // {
+    //     sequelize,   //specifies the Sequelize instance to be used for this model
+    //     modelName: 'Currency'   //sets the name of the model to 'Currency
+    // });
     Currency 
     .sync()
     .then(() => {
@@ -41,5 +41,5 @@ const Currency = sequelize.define('Currency', {  //define the Currency model
     const Country = require('./Country'); // import the Country model 
     //'foreignKey' specifies the foreign key coloumn (countryId) in the (Currency) table that references rge primary key of the country table 
     Currency.belongsTo(Country, { foreignKey: 'countryId' })
-    
+
 module.exports =Currency;

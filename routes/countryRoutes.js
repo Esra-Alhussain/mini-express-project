@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();   //define a router oject
 const morgan = require('morgan');
 //Import Sequelize country model
-const { Country } = require('../models/Country');
+const Country = require('../models/Country');
 
 //add middleware to handle JSON data
 router.use(express.json())
@@ -52,11 +52,11 @@ router.get('/:id', async(request, response) => {
 router.post('/', async(request, response) => {
     try{
         //extract the data that was sent in the POST request body 
-        const { countryId, countryName  } = request.body;
-        const newCountry = await Country.create({ countryId, countryName })
+        const addedCountry = request.body;
+        const newCountry = await Country.create(addedCountry)
         response.status(201).json(newCountry);
     }catch(error){
-        response.status(500).json({ error: 'Internal server error' });
+        response.status(500).json({ error: error });
     }
 });
 
