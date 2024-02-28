@@ -4,16 +4,24 @@
   "description": "Package manager for the first Assignment in the Mini Project Roadmap",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js",
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Student",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
+    "date-and-time": "^3.1.1",
+    "dotenv": "^16.4.4",
     "express": "^4.18.2",
     "morgan": "^1.10.0",
+    "pg": "^8.11.3",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.37.1",
     "uuid": "^9.0.1",
     "uuid4": "^2.0.3"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^6.6.2"
   }
 }
