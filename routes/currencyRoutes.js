@@ -3,10 +3,11 @@ const { v4: uuidv4 } = require('uuid');
 const express = require('express');
 const router = express.Router();  //define router object
 const morgan = require('morgan');
-const Currency = require('../models/Currency');  //import Sequelize Currency model 
 
-//Middleware for parsing JSON request bodies
 router.use(express.json());
+
+router.use
+
 
 // Use morgan middleware for logging
 router.use(morgan(':method :url :status :res[content-length] - :response-time ms :req-body'));
@@ -27,22 +28,29 @@ router.use(morgan('dev'));
  * country: a string, the name of the country
  * conversionRate: the amount, in that currency, required to equal 1 Canadian dollar
  */
+let currencies = [
+    {
+      id: 1,
+      currencyCode: "CDN",
+      country: "Canada",
+      conversionRate: 1
+    },
+    {
+      id: 2,
+      currencyCode: "USD",
+      country: "United States of America",
+      conversionRate: 0.75
+    }
+  ]
 
   /**
    * TODO: GET Endpoint
    * @receives a get request to the URL: http://localhost:3001/api/currency/
    * @responds with returning the data as a JSON
    */
-  router.get('/', async (request, response) => {
-    try {
-       //using the findAll() method to retrives all records from 'Curreny' table in the database and returns them as an array of objects
-       const currencies = await Currency.findAll();    //Retrive all currencies from data using Sequelize method
-       response.json(currencies);    //send JSON response with currencies
-    }catch (error){
-       console.error('Error fetching currencies:', error);
-       response.status(500).json({ error: 'Internal server error '});
-    }
-  });
+  router.get('/', (request, response) => {
+    response.json(currencies)
+  })
   
   /**
    * TODO: GET:id Endpoint
@@ -50,14 +58,15 @@ router.use(morgan('dev'));
    * @responds with returning specific data as a JSON
    */
   //sets up a GET route at the path /api/currency/:id
-  router.get('/:id', async (request, response) => {
+  router.get('/:id', (request, response) => {
     try{
-      //extracts the id parameter from the URL
-      const currencyId = request.params.id;
-      // Find currency by ID using Sequelize method (findByPk)
-      const currency = await Currency.findByPk(currencyId);
-    
-      //If the currency is found, it is returned as JSON
+    //extracts the id parameter from the URL
+    const currencyId = request.params.id;
+    // Find the currency with the specified id using find method
+    //This is the condition inside the arrow function. It checks if the id property of the current currency object (the one being iterated over in the array) is equal to the value stored in the currencyId variable
+    const currency = currencies.find(currency => currency.id == currencyId);
+  
+    //If the currency is found, it is returned as JSON
     if (currency){
       response.json(currency);
     }else{
@@ -76,20 +85,39 @@ router.use(morgan('dev'));
    * with data object enclosed
    * @responds by returning the newly created resource
    */
-  router.post('/', async (request, response) => {
+  router.post('/', (request, response) => {
     try{
-      //extract data sent in the POST request body using request.body;
-      // const { id,currencyCode , countryId , conversionRate } = request.body;
-       const addedCurrency = request.body;
-      //create() method will only create a new currency if all required fields are provided and meet the defined constraints in the model 
-      const newCurrency = await Currency.create(addedCurrency);
+    //extract data sent in the POST request body using request.body;
+    const { currencyCode , country , conversionRate } = request.body;
+  
+    // Check if required information is present
+    if( !currencyCode || !country || !conversionRate) {
+    // Return a 400 status with an error message if content is missing
+      return response.status(400).json({ error: 'content missing' });
+    }
+     //creating a new array "updatedCurrencies" that contains all the elements of the original "currencies"
+     //arary + the new currency object
+     // Create a new currency object with a unique ID 
+     const newCurrency = {
+      id:uuidv4(),  // Generate a new UUID
+      currencyCode:currencyCode,
+      country: country,
+      conversionRate: conversionRate,
+     }
+       // Use concat to create a new array with the old currencies and the new one
+      const updatedCurrencies = currencies.concat ( newCurrency);
+    
+      // currencies.push(newCurrency);
+  
       console.log(newCurrency);
-      
-      // Send JSON response with newly created currency
-      response.status(201).json(newCurrency);
+      //creating a new array "updatedCurrencies" that contains all the elements of the original "currencies"
+      //array + the new currency object
+      // Respond with the newly created currency
+    response.status(201).json(updatedCurrencies);
+
    } catch (error) {
-      // Handle errors 
-      response.status(500).json({ error: error });
+    // Handle errors 
+    response.status(500).json({ error: 'Internal server error' });
     }
   });
   
@@ -100,24 +128,38 @@ router.use(morgan('dev'));
    * Hint: updates the currency with the new conversion rate
    * @responds by returning the newly updated resource
    */
-  // modify an existing record in the Currency table based on the provided ID
-  router.put('/:id/:newRate', async (request, response) => {
+  router.put('/:id/:newRate', (request, response) => {
     try{ 
-      //Extracts the newRate and the currencyId from the request parameter 
-      const { newRate }= request.params;
-      const currencyId = parseInt(request.params.id);
-    
-      //Use the "update" method to update the currency in the database by taking 2 parameters
-      //Pass an object with the new conversionRate to be updated
-      //Pass a 'where' clause specifying the ID of the currency to be updated
-      const updatedCurrencies = await Currency.update( {conversionRate: newRate}, { where: { id: currencyId } });
-      console.log(updatedCurrencies);
-    
-      // Send a JSON response containing the result of the update operation
-      response.json(updatedCurrencies);
-    } catch ( error ) {
-      response.status(500).json({ error: 'Internal server error' });
+
+    //extract data  properties from an object sent in the PUT request using destructuring assignment" to extract and assign them to variables
+    const { currencyCode, country, conversionRate } = request.body;
+    const newRate= request.params.newRate;
+    const currencyId = parseInt(request.params.id);
+  
+    //Use concat to create a new array with the updated conversionRate
+    const updatedCurrencies = currencies.map(currency => {
+      // Check if the current currency object matches the one you want to update
+      if (currency.id === currencyId){
+      // Update the conversionRate directly in the existing object
+       currency.conversionRate = Number(newRate);
+  
+      return {
+        ...currency,
+        conversionRate: newRate
+       };
+     };
+     return currency;
+    });
+    console.log(updatedCurrencies);
+  
+    //Return the updatedCurrencies
+    return response.json(updatedCurrencies);
+
+  } catch ( error ) {
+    response.status(500).json({ error: 'Internal server error' });
+
      }
+  
   })
   
   /**
@@ -125,19 +167,29 @@ router.use(morgan('dev'));
    * @receives a delete request to the URL: http://localhost:3001/api/currency/:id,
    * @responds by returning a status code of 204
    */
-  router.delete('/:id', async (request, response) => {
+  router.delete('/:id', (request, response) => {
     try{
     
-       // Extract the id parameter from the URL
-        const currencyId = parseInt(request.params.id);
-        // console.log(`This is the currencies Array: ${ JSON.stringify(currencies)}`)
-      
-        // Delete currency using Sequelize method
-        const updatedCurrencies = await Currency.destroy({ where: { id: currencyId } })
-        response.status(204).end();   //send 204 => no content response
+    // Extract the id parameter from the URL
+    const currencyId = parseInt(request.params.id);
+    console.log(`This is the currencies Array: ${ JSON.stringify(currencies)}`)
+    // Use the filter method to create a new array excluding the currency with the specified ID
+    //the condition checks if the id of the current currency is not equal (!==) to the specified currencyId
+    const updatedCurrencies = currencies.filter(currency => currency.id !== currencyId)
+    console.log(`This is the updatedCurrencies Array:`,JSON.stringify(updatedCurrencies))
+  
+    // Check if any currency was removed (if the arrays have different lengths)
+    if(updatedCurrencies.length < currencies.length){
+      // Respond with a status code of 204 (success, no content)
+      response.status(204).send();
+     }else{
+      response.status(404).json({
+        error: 'resource not found'
+      });
+     }
     } catch (error) {
-        // Handle errors 
-        response.status(500).json({ error: 'Internal server error' });
+      // Handle errors 
+      response.status(500).json({ error: 'Internal server error' });
     }
   });
 
