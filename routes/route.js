@@ -7,6 +7,7 @@ const Currency = require('../models/Currency')
 router.get('/currency-countryName', async (request, response) => {
     try{
         // Make a query on the currency model including the country model
+        
         const currencies = await Currency.findAll({
             //include the Country model to join the tables
             include: [{ model: Country }]
