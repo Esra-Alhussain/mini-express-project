@@ -29,8 +29,17 @@ const Currency = sequelize.define('Currency', {  //define the Currency model
         sequelize,   //specifies the Sequelize instance to be used for this model
         modelName: 'Currency'   //sets the name of the model to 'Currency
     });
+    Currency 
+    .sync()
+    .then(() => {
+        console.log('Currency table created')
+    })
+    .catch((error) => {
+        console.log('Error creating table: ', error)
+    })
 
     const Country = require('./Country'); // import the Country model 
     //'foreignKey' specifies the foreign key coloumn (countryId) in the (Currency) table that references rge primary key of the country table 
     Currency.belongsTo(Country, { foreignKey: 'countryId' })
+    
 module.exports =Currency;

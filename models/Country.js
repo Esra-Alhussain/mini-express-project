@@ -16,6 +16,14 @@ const Country = sequelize.define('Country', {
         sequelize,   //specifies the Sequelize instance to be used for this model
         modelName: 'Currency'   //sets the name of the model to 'Currency
     });
+    Country
+    .sync()
+    .then(() => {
+        console.log('Country table created')
+    })
+    .catch((error) => {
+        console.log('Error creating table: ', error)
+    })
 
 
 module.exports = Country;
