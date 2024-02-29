@@ -1,25 +1,19 @@
-// Load environment variables
-require('dotenv').config();
-
 // const { uuid } = require('uuidv4');
 const express = require('express')  // We import the express application
 const cors = require('cors') // Necessary for localhost
 const app = express() // Creates an express application in app
-const middlewares = require("./utils/middleware");
 var morgan = require('morgan');
-const sequelize = require('./config')
-const currencyRoute = require('./routes/currencyRoutes'); //access the currencyRoute file 
-const countryRoute = require('./routes/countryRoutes'); //access the country Route file 
-const route = require('./routes/route'); //access the country Route file 
 
+const currencyRoute = require('./routes/currencyRoutes'); //acess the currencyRoute file 
+app.use('/api/currency', currencyRoute);   
 /**
  * Initial application setup
  * We need to use cors so we can connect to a localhost later
  * We need express.json so we can receive requests with JSON data attached
  */
 app.use(cors())
-app.use(express.json());
-app.use(middlewares.logger);
+app.use(express.json())
+
 
 // Use morgan middleware for logging
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :req-body'));
@@ -39,17 +33,11 @@ app.get('/', (request, response) => {
   response.send('Hello World!')
 })
 
-
-  app.use('/api/country', countryRoute);  
-  app.use('/api/currency/', currencyRoute);   
-  app.use('/api', route);
-
-    // Catch-all route for unknown endpoints
-app.use(( request, response) => {
-   // Return a 404 status with an error message for unknown endpoints
-   response.status(404).json({ error: 'unknown endpoint'});
-});  
-
+  // Catch-all route for unknown endpoints
+  app.use(( request, response) => {
+    // Return a 404 status with an error message for unknown endpoints
+    response.status(404).json({ error: 'unknown endpoint'});
+   });
 
   const PORT = 3001
   app.listen(PORT, () => {

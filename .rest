@@ -1,30 +1,18 @@
 GET http://localhost:3001/api/currency/
 ###
-POST http://localhost:3001/api/currency/
+POST http://localhost:3001/api/currency
 Content-Type: application/json
 
 {
-  "id":2,
-  "currencyCode": "Canada",
-  "countryId": 2,
+  "currencyCode": "FDN",
+  "country": "Foland",
   "conversionRate": 7
 }
-###
-GET http://localhost:3001/api/country/
 
 ###
-POST http://localhost:3001/api/country/
+PUT http://localhost:3001/api/currency/2/246
 Content-Type: application/json
 
-{
-  "name": "USA"
-}
-###
-PUT http://localhost:3001/api/currency/2/CAD
-Content-Type: application/json
-
-###  
-Get http://localhost:3001/api/currency-countryName
 
 ###
-DELETE http://localhost:3001/api/currency/1
+DELETE http://localhost:3001/api/currency/2
